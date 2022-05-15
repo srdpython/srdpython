@@ -1,0 +1,44 @@
+import re
+import collections
+
+"""
+Read a log file and count the occurrence of top 10 ip’s in the file.
+"""
+
+def extract_ip_count():
+    ipaddress = []
+    lines = open('iplog.txt','r').readlines()
+    for a in lines:
+        pattern = (r'(^\d+\.\d+\.\d+\.\d+)')
+        matched_ip = re.findall(pattern,a)
+        ipaddress.append(matched_ip)
+    print(ipaddress)
+    print(type(ipaddress))
+    
+    #convert into flat list
+    flat_list_ipaddress = []
+    for sublist in ipaddress:
+        for item in sublist:
+            flat_list_ipaddress.append(item)
+    print(flat_list_ipaddress)
+    
+    # use the counter on the flat list to obtain number of occurrences
+    count_of_ipaddress = collections.Counter(flat_list_ipaddress)
+    print("counter output")
+    print(count_of_ipaddress)
+    # count occurance > 6 of count
+    new_top_5_ip = {}
+    for key, value in count_of_ipaddress.items():
+        if value >= 6:
+            new_top_5_ip[key] = value
+    print(new_top_5_ip)
+
+    # Obtain a sequence of top 10 ips with most occurrence
+    top10_ip = count_of_ipaddress.most_common(10)
+    print(top10_ip)
+
+def main():
+    extract_ip_count()
+
+if __name__ == "__main__":
+    main()
